@@ -8,30 +8,40 @@
     <title>درگاه پرداخت</title>
 </head>
 <body>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name">
-    <label for="message">Message:</label>
-    <textarea id="message" name="message"></textarea>
-    <input type="submit" value="Submit">
-</form>
-
     <div class="container">
-        <h1>درگاه پرداخت</h1>
-        <form id="payment-form">
-            <label for="card-number">شماره کارت:</label>
-            <input type="text" id="card-number" placeholder="XXXX-XXXX-XXXX-XXXX" required>
-            
-            <label for="expiry-date">تاریخ انقضا:</label>
-            <input type="text" id="expiry-date" placeholder="MM/YY" required>
-            
-            <label for="cvv">CVV:</label>
-            <input type="text" id="cvv" placeholder="XXX" required>
-            
-            <label for="otp">کد یکبار مصرف:</label>
-            <input type="text" id="otp" placeholder="XXXXXX" required>
-            
-            <button type="submit">پرداخت</button>
+        <h1>ورود پیام</h1>
+        <form id="message-form">
+            <label for="name">نام:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="message">پیام:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">ارسال پیام</button>
         </form>
+
+        <h2>پیام‌های دریافتی:</h2>
+        <ul id="messageList"></ul>
     </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000'); // آدرس سرور شما
+
+        // هنگام دریافت پیام از سرور
+        socket.addEventListener('message', function (event) {
+            const messageList = document.getElementById('messageList');
+            const newItem = document.createElement('li');
+            newItem.textContent = event.data;
+            messageList.appendChild(newItem);
+        });
+
+        // ارسال پیام به سرور
+        document.getElementById('message-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const fullMessage = `${name}: ${message}`; // ترکیب نام و پیام
+            socket.send(fullMessage); // ارسال پیام به سرور
+            this.reset(); // پاک کردن فرم
+        });
+    </script>
 </body>
 </html>
